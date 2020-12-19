@@ -1,0 +1,24 @@
+@import '~normalize.css';
+
+@import '~@ui/style/ui';
+
+html {
+  font-family: 'Trebuchet MS', sans-serif;
+  user-select: none;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #3c3034;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
