@@ -18,8 +18,8 @@ const knightsPurposes = {
 }
 
 exports.knightsPurposes = Object.entries(knightsPurposes)
-  .reduce((acc, [cell, purposes]) => {
-    acc.push({ cell, purposes })
+  .reduce((acc, [key, purposes]) => {
+    acc.push({ cell: +key, purposes })
 
     return acc
   }, [])

@@ -3,37 +3,50 @@ const { createServer } = require('http')
 const { knightsPurposes } = require('./knights')
 
 const {
+  allowedCells,
   getSafePool,
   getAttackers,
   randomFromArray,
   shuffle,
-  intersection,
+  allowedCount,
+  difference,
+  uniqUnion,
 } = require('./tools')
 
 const port = 3317
 
-const allowedCells = [6, 7, 8, 11, 13, 16, 17, 18]
-
 let isVictory = true
+
+const takeSecond = (first, pool) => {
+  const firstAllowedCount = allowedCount(first.purposes)
+
+  let second, duoCells
+
+  do {
+    second = pool.pop()
+    duoCells = uniqUnion(first.purposes, second.purposes)
+  } while (allowedCount(duoCells) == firstAllowedCount)
+
+  return { second, duoCells }
+}
 
 const combine = (first, pool) => {
   pool = shuffle(pool.filter(({ cell }) => cell != first.cell))
 
-  const second = pool.pop()
-  const duoCells = [...new Set([...first.purposes, ...second.purposes])]
+  const { second, duoCells } = takeSecond(first, pool)
 
-  let cells = []
+  let trioCells = []
 
   const third = pool.find(({ purposes }) => {
-    cells = [...new Set([...duoCells, ...purposes])]
+    trioCells = uniqUnion(duoCells, purposes)
 
-    return intersection(cells, allowedCells).length == 4
+    return allowedCount(trioCells) == 4
   })
 
-  return {
-    knights: [first, second, third].map(k => k.cell),
-    cells,
-  }
+  const knights = [first, second, third].map(k => k.cell)
+  const cells = difference(trioCells, knights)
+
+  return { knights, cells }
 }
 
 const onRequest = (req, res) => {
@@ -48,7 +61,6 @@ const onRequest = (req, res) => {
   isVictory = !isVictory
 
   const pool = isVictory ? getSafePool(cell) : [...knightsPurposes]
-
   const first = isVictory
     ? randomFromArray(pool)
     : randomFromArray(getAttackers(cell))
