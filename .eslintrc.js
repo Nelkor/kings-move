@@ -18,6 +18,7 @@ module.exports = {
     'semi': ['error', 'never'],
     'comma-dangle': ['error', 'always-multiline'],
     'eol-last': ['error', 'always'],
+    'spaced-comment': ['error', 'always'],
     'no-trailing-spaces': 2,
     'curly': ['error', 'all'],
     'object-curly-spacing': ['error', 'always'],
@@ -37,6 +38,7 @@ module.exports = {
     ],
 
     'vue/html-indent': ['error', 2],
+    'vue/no-multi-spaces': 'error',
     'vue/attribute-hyphenation': ['error', 'always'],
     'vue/max-attributes-per-line': ['error', {
       singleline: 1,
